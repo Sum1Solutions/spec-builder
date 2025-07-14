@@ -46,3 +46,7 @@ This project is open source and available under the MIT License.
 - Inspired by ["The New Code" talk by Sean Grove](https://www.youtube.com/watch?v=8rABwKRsec4)
 - Built with HTML, CSS, and vanilla JavaScript
 - Designed with domain experts in mind
+
+## Deployment
+
+This project can be deployed on **Cloudflare Pages**. Use an empty **build command** and set the **build output directory** to `/`. If you need a backend, configure it through environment variables or API routes in the Cloudflare dashboard.

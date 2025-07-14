@@ -29,6 +29,12 @@ The Spec Builder bridges the gap between domain expertise and technical implemen
 3. The app will generate a clear specification based on your inputs
 4. Use the generated specification as input for AI-assisted development tools
 
+## Running the Backend
+
+1. Navigate to the `backend` folder
+2. Run `npm install` to install dependencies
+3. Start the server with `npm start` (or `node server.js`)
+
 ## Inspiration
 
 This project is inspired by Sean Grove's vision of the future of coding, where domain experts can focus on what they know best while AI handles the technical implementation. The app aims to make this vision a reality by helping domain experts articulate their requirements clearly and systematically.

@@ -1,7 +1,6 @@
 # Spec Builder for Domain Experts
 
 [![Open in Windsurf](https://img.shields.io/badge/Open%20in-Windsurf-blue.svg)](https://wind.surf)
-
 ## Overview
 
 This specification builder is inspired by Sean Grove's talk "The New Code" (https://www.youtube.com/watch?v=8rABwKRsec4), which discusses the future of software development and the role of AI in coding. The app is designed to help domain experts (clinicians, lawyers, engineers, etc.) clarify their ideas and generate clear specifications that can be used for AI-assisted implementation.

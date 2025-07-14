@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spec Clarifier for Domain Experts</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .intro {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #3498db;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 5px;
+        }
+        textarea, input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            font-family: inherit;
+        }
+        input[type="submit"], button {
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        input[type="submit"]:hover, button:hover {
+            background: #2980b9;
+        }
+        .result {
+            display: none;
+            margin-top: 30px;
+        }
+        .spec-output {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .suggestions {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .suggestions h3 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        .suggestions ul {
+            margin: 10px 0;
+        }
+        .suggestions li {
+            margin: 5px 0;
+        }
+        .back-btn {
+            background: #95a5a6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+            margin-right: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .back-btn:hover {
+            background: #7f8c8d;
+        }
+        .build-btn {
+            background: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .build-btn:hover {
+            background: #219a52;
+        }
+        .format-toggle {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+        .format-toggle label {
+            margin-right: 20px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .format-toggle input[type="radio"] {
+            margin-right: 5px;
+        }
+        .example-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 10px;
+            float: right;
+        }
+        .example-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="form-section">
+            <h2>🧠 Specification Builder for Domain Experts</h2>
+            <div class="intro">
+                <p>This app helps you (a subject-matter expert like a clinician, lawyer, engineer, etc.) walk through your goals step-by-step to generate a clear specification for AI-assisted implementation. The system can then use this spec to generate or scaffold actual applications tailored to your domain.</p>
+            </div>
+
+            <form id="specForm">
+                <div class="form-group">
+                    <label>1. What do you want to build? <button type="button" class="example-btn" onclick="useExample(this, 'Transcribe patient visits into SOAP notes')">📋 Use Example</button></label>
+                    <textarea name="goal" rows="2" placeholder="e.g., Transcribe patient visits into SOAP notes"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>2. Why is this important? <button type="button" class="example-btn" onclick="useExample(this, 'Improve clinical documentation accuracy and reduce manual burden.')">📋 Use Example</button></label>
+                    <textarea name="why" rows="3" placeholder="e.g., Improve clinical documentation accuracy and reduce manual burden."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>3. Who will use this? <button type="button" class="example-btn" onclick="useExample(this, 'Primary care clinicians, lawyers, students, etc.')">📋 Use Example</button></label>
+                    <textarea name="audience" rows="2" placeholder="e.g., Primary care clinicians, lawyers, students, etc."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>4. What data goes in? <button type="button" class="example-btn" onclick="useExample(this, 'Audio recordings, PDFs, scanned documents, structured EHR data')">📋 Use Example</button></label>
+                    <textarea name="inputs" rows="2" placeholder="e.g., Audio recordings, PDFs, scanned documents, structured EHR data"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>5. What should come out? <button type="button" class="example-btn" onclick="useExample(this, 'Structured SOAP notes, FHIR JSON, HL7 messages, formatted text, PDF summaries')">📋 Use Example</button></label>
+                    <textarea name="outputs" rows="2" placeholder="e.g., Structured SOAP notes, FHIR JSON, HL7 messages, formatted text, PDF summaries"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>6. What rules or constraints matter? <button type="button" class="example-btn" onclick="useExample(this, 'No hallucinations, enforce ICD-10/SNOMED mapping, HIPAA compliance, role-based access')">📋 Use Example</button></label>
+                    <textarea name="constraints" rows="4" placeholder="e.g., No hallucinations, enforce ICD-10/SNOMED mapping, HIPAA compliance, role-based access"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>7. What does success look like? <button type="button" class="example-btn" onclick="useExample(this, '90%+ accuracy when compared to human notes, deployment-ready within 2 weeks, usable by non-technical staff')">📋 Use Example</button></label>
+                    <textarea name="success" rows="3" placeholder="e.g., 90%+ accuracy when compared to human notes, deployment-ready within 2 weeks, usable by non-technical staff"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>8. Any edge cases or known challenges? <button type="button" class="example-btn" onclick="useExample(this, 'Multiple speakers, unclear audio, language mixing, patient non-compliance')">📋 Use Example</button></label>
+                    <textarea name="edges" rows="3" placeholder="e.g., Multiple speakers, unclear audio, language mixing, patient non-compliance"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>9. What examples or prompts could we test this with? <button type="button" class="example-btn" onclick="useExample(this, 'Sample audio of a 12-minute consultation with overlaps, 2 PDF documents with poor OCR quality')">📋 Use Example</button></label>
+                    <textarea name="prompts" rows="3" placeholder="e.g., Sample audio of a 12-minute consultation with overlaps, 2 PDF documents with poor OCR quality"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>10. How should this app sound or feel (tone/style)? <button type="button" class="example-btn" onclick="useExample(this, 'Professional, supportive, friendly, no jargon')">📋 Use Example</button></label>
+                    <textarea name="style" rows="2" placeholder="e.g., Professional, supportive, friendly, no jargon"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>11. What type of app is this?</label>
+                    <select name="type">
+                        <option value="form">Interactive Form</option>
+                        <option value="chatbot">Chatbot Assistant</option>
+                        <option value="dashboard">Dashboard/Viewer</option>
+                        <option value="voice">Voice-to-Text Tool</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>12. Should any data be stored or exported? <button type="button" class="example-btn" onclick="useExample(this, 'Export PDF, temporary session only, save to user account')">📋 Use Example</button></label>
+                    <textarea name="storage" rows="2" placeholder="e.g., Export PDF, temporary session only, save to user account"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>13. What should the user feel when using this app? <button type="button" class="example-btn" onclick="useExample(this, 'Empowered, relieved, clear, confident')">📋 Use Example</button></label>
+                    <textarea name="emotion" rows="2" placeholder="e.g., Empowered, relieved, clear, confident"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>14. Optional: Want to name this app? <button type="button" class="example-btn" onclick="useExample(this, 'SOAPify, CourtBot, VoiceNoteMD')">📋 Use Example</button></label>
+                    <input type="text" name="name" placeholder="e.g., SOAPify, CourtBot, VoiceNoteMD">
+                </div>
+
+                <button type="button" id="generateBtn" onclick="generateSpec()">Generate Spec</button>
+            </form>
+        </div>
+
+        <div id="result-section" class="result">
+            <h2>📄 Generated Specification</h2>
+            
+            <div class="format-toggle">
+                <label>
+                    <input type="radio" name="format" value="text" checked onchange="toggleFormat()"> 
+                    📝 Text Prompt
+                </label>
+                <label>
+                    <input type="radio" name="format" value="json" onchange="toggleFormat()"> 
+                    📋 JSON Format
+                </label>
+            </div>
+            
+            <div id="spec-output" class="spec-output"></div>
+
+            <div class="suggestions">
+                <h3>💡 Suggested Use</h3>
+                <ul>
+                    <li>✅ Use this spec to prompt AI models or agents to build the application described</li>
+                    <li>🔁 Attach this spec or its hash to commits to ensure intent is preserved and traceable</li>
+                    <li>📌 System can use this to auto-generate UIs, backends, or workflow integrations</li>
+                </ul>
+
+                <h3>🧠 Model Suggestions</h3>
+                <ul>
+                    <li><b>Reasoning LLMs:</b> GPT-4, Claude 3, Gemini 1.5 Pro — for structuring outputs, logic-heavy planning, compliance validation</li>
+                    <li><b>Fast Draft LLMs:</b> GPT-3.5 Turbo, Claude Instant, Mistral 7B — for quick prototyping or drafting workflows</li>
+                </ul>
+            </div>
+
+            <button class="back-btn" onclick="showForm()">🔙 Back to Builder</button>
+            <button class="build-btn" onclick="buildForMe()">Build it for me ➡️</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSpec = {};
+        
+        function generateSpec() {
+            console.log('Generate spec clicked!');
+            
+            const form = document.getElementById('specForm');
+            const formData = new FormData(form);
+            const spec = {};
+            
+            // Only include fields that have values (not empty or just whitespace)
+            const fields = [
+                { key: 'Goal', name: 'goal' },
+                { key: 'Rationale', name: 'why' },
+                { key: 'Audience', name: 'audience' },
+                { key: 'Inputs', name: 'inputs' },
+                { key: 'Outputs', name: 'outputs' },
+                { key: 'Constraints', name: 'constraints' },
+                { key: 'Success Criteria', name: 'success' },
+                { key: 'Edge Cases', name: 'edges' },
+                { key: 'Evaluation Prompts', name: 'prompts' },
+                { key: 'Style/Tone', name: 'style' },
+                { key: 'App Type', name: 'type' },
+                { key: 'Data Storage', name: 'storage' },
+                { key: 'Target Emotion', name: 'emotion' },
+                { key: 'App Name', name: 'name' }
+            ];
+            
+            console.log('Processing fields...');
+            fields.forEach(field => {
+                const value = formData.get(field.name);
+                if (value && value.trim() !== '') {
+                    spec[field.key] = value.trim();
+                    console.log(`Added field: ${field.key} = ${value.trim()}`);
+                }
+            });
+            
+            console.log('Final spec:', spec);
+            
+            // Check if we have at least some basic fields filled
+            const hasMinimumFields = spec.Goal || spec.Inputs || spec.Outputs || spec.Audience;
+            console.log('Has minimum fields:', hasMinimumFields);
+            
+            if (!hasMinimumFields) {
+                alert('Please fill in the fields needed to do something.');
+                return;
+            }
+            
+            currentSpec = spec;
+            displaySpec();
+            
+            document.getElementById('form-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+            console.log('Switched to result section');
+        }
+        
+        function displaySpec() {
+            const outputElement = document.getElementById('spec-output');
+            const formatRadio = document.querySelector('input[name="format"]:checked');
+            const format = formatRadio ? formatRadio.value : 'text';
+            
+            if (format === 'json') {
+                const specText = JSON.stringify(currentSpec, null, 4);
+                outputElement.textContent = specText;
+            } else {
+                // Generate text prompt format
+                let textPrompt = "Please build an application with the following specifications:\n\n";
+                
+                Object.entries(currentSpec).forEach(([key, value]) => {
+                    textPrompt += `**${key}:** ${value}\n\n`;
+                });
+                
+                textPrompt += "Please create a functional application that meets these requirements.";
+                outputElement.textContent = textPrompt;
+            }
+        }
+        
+        function toggleFormat() {
+            displaySpec();
+        }
+
+        function showForm() {
+            document.getElementById('form-section').style.display = 'block';
+            document.getElementById('result-section').style.display = 'none';
+        }
+
+        function buildForMe() {
+            // Show loading state
+            const buildBtn = document.querySelector('.build-btn');
+            const originalText = buildBtn.textContent;
+            buildBtn.textContent = 'Building... ⏳';
+            buildBtn.disabled = true;
+            
+            // Prepare the JSON specification
+            const jsonSpec = JSON.stringify(currentSpec, null, 2);
+            
+            // Send to backend API
+            fetch('/api/build', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: jsonSpec
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Build response:', data);
+                
+                // Handle successful response
+                if (data.success) {
+                    alert('Application build started successfully! ' + (data.message || 'Check your dashboard for progress.'));
+                    
+                    // If there's a URL to the built app or build status, you could redirect
+                    if (data.url) {
+                        window.open(data.url, '_blank');
+                    }
+                } else {
+                    alert('Build failed: ' + (data.error || 'Unknown error occurred'));
+                }
+            })
+            .catch(error => {
+                console.error('Build error:', error);
+                alert('Failed to start build process. Please try again or check your connection.');
+            })
+            .finally(() => {
+                // Reset button state
+                buildBtn.textContent = originalText;
+                buildBtn.disabled = false;
+            });
+        }
+
+        function useExample(button, exampleText) {
+            console.log('Using example:', exampleText);
+            // Find the textarea or input associated with this button
+            const formGroup = button.closest('.form-group');
+            const textarea = formGroup.querySelector('textarea');
+            const input = formGroup.querySelector('input[type="text"]');
+            
+            if (textarea) {
+                textarea.value = exampleText;
+                textarea.focus();
+            } else if (input) {
+                input.value = exampleText;
+                input.focus();
+            }
+        }
+    </script>
+</body>
+</html>

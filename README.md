@@ -43,6 +43,6 @@ This project is open source and available under the MIT License.
 
 ## Acknowledgments
 
-- Inspired by "The New Code" talk by Sean Grove
+- Inspired by ["The New Code" talk by Sean Grove](https://www.youtube.com/watch?v=8rABwKRsec4)
 - Built with HTML, CSS, and vanilla JavaScript
 - Designed with domain experts in mind

@@ -360,8 +360,8 @@
 
             <div class="result-actions">
                 <button type="button" onclick="showForm()">✏️ Edit Spec</button>
-                <button type="button" onclick="downloadSpec()">💾 Share/Download</button>
-                <button type="button" onclick="buildForMe()">🤖 Build it for me</button>
+                <button type="button" onclick="downloadSpec()">💾 Download</button>
+                <button type="button" onclick="buildForMe()">🤖 Build it</button>
             </div>
         </div>
     </div>
@@ -397,15 +397,14 @@
                 outputElement.textContent = specText;
                 outputElement.dataset.text = specText;
             } else if (format === 'markdown') {
-                // Generate markdown format
-                let markdownPrompt = "# Application Specification\n\n";
+                // Generate concise markdown format
+                let markdownPrompt = "# Spec\n\n";
                 
                 // Only show fields that have values
                 Object.entries(currentSpec).forEach(([key, value]) => {
-                    markdownPrompt += `## ${key}\n${value}\n\n`;
+                    markdownPrompt += `### ${key}\n${value}\n\n`;
                 });
                 
-                markdownPrompt += "## Requirements\nPlease create a functional application that meets these requirements.";
                 outputElement.textContent = markdownPrompt;
                 outputElement.dataset.text = markdownPrompt;
             } else { // text format

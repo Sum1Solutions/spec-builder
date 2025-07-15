@@ -1,8 +1,9 @@
-Copyright (c) 2024 Jon Borelli
+Copyright (c) 2025 Sum1Solutions, LLC
 
-**Disclaimer: This is not a legally binding document and is for informational purposes only. It is a good-faith expression of the author's intent. You must consult with a legal professional to obtain a formal, enforceable commercial license if your use case requires it.**
+This license uses MIT License terms with an explicit equity stake condition for public companies. It is designed to:
 
-### Permissive Grant
+1. Promote Open Innovation: The software is free to use for personal, non-profit, and private commercial projects.
+2. Ensure Fair Compensation: Companies that become publicly traded while using this software must grant Sum1Solutions, LLC an equity stake.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -14,6 +15,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 Permission is granted to use this software for any purpose, including for-profit commercial use, with one specific exception:
 
-If this software, or any work derived from it, is used in a product or service by a company that is, or becomes, publicly traded on any stock exchange (through an IPO, merger, acquisition, or any other means), then that company agrees to grant the original author(s) of this software a one-time, irrevocable equity grant equivalent to **one percent (1%)** of the company's total outstanding shares as of the date of the public listing or acquisition.
+If this software, or any work derived from it, is used in a product or service by a company that is, or becomes, publicly traded on any stock exchange (through an IPO, merger, acquisition, or any other means), then that company agrees to grant Sum1Solutions, LLC a one-time equity stake equivalent to one percent (1%) of the company's total outstanding shares as of the date of the public listing or acquisition. This equity stake is open to negotiation.
 
 This grant is a precondition of the license for such use. For all other private commercial, personal, or non-profit use, this software is free to use without this condition.

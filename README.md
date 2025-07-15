@@ -46,10 +46,12 @@ Feel free to fork this repository and submit pull requests with improvements or 
 
 ## License
 
-This project is released under a custom "Fair Use" license. We believe in open and accessible software, but also in fair compensation for valuable work.
+Copyright (c) 2025 Sum1Solutions, LLC
 
-- **Personal & Private Commercial Use:** The software is free to use for personal projects, non-profits, and private commercial ventures.
-- **Public Company Use:** If this software is used in a product by a company that is or becomes publicly traded, the company must grant the author a 1% equity stake.
+This project is released under a custom license that uses MIT License terms with an explicit equity stake condition for public companies. It is designed to:
+
+1. Promote Open Innovation: The software is free to use for personal, non-profit, and private commercial projects.
+2. Ensure Fair Compensation: Companies that become publicly traded while using this software must grant Sum1Solutions, LLC an equity stake.
 
 This is a high-level summary. Please see the full `LICENSE` file for the exact terms and conditions. It is strongly recommended to consult with a legal professional to ensure compliance if you intend to use this software in a commercial product.
 

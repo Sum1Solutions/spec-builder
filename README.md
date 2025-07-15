@@ -63,4 +63,62 @@ This is a high-level summary. Please see the full `LICENSE` file for the exact t
 
 ## Deployment
 
-This project can be deployed on **Cloudflare Pages**. Use an empty **build command** and set the **build output directory** to `/`. If you need a backend, configure it through environment variables or API routes in the Cloudflare dashboard.
+To deploy the Spec Builder app, you can use any static file hosting service (e.g., Netlify, Vercel, GitHub Pages, Cloudflare Pages, or Cloudflare Workers) or your own server. The main entry point is `index.html`.
+
+### Deploying to Cloudflare Workers (Recommended for Custom Domains)
+
+1. **Ensure you have [Wrangler](https://developers.cloudflare.com/workers/wrangler/) installed:**
+   ```sh
+   npm install -g wrangler
+   ```
+2. **Check your `wrangler.toml` file:**
+   ```toml
+   name = "clarifymythoughts"
+   compatibility_date = "2025-07-15"
+
+   [assets]
+   directory = "."
+   ```
+3. **Deploy your site:**
+   ```sh
+   npx wrangler deploy
+   ```
+4. **Set up DNS in Cloudflare:**
+   - For the root domain (`clarifymythoughts.com`):
+     - Type: `A`
+     - Name: `@`
+     - IPv4 address: `192.0.2.1`
+     - Proxy status: Proxied (orange cloud)
+   - (Optional) For `www` subdomain:
+     - Type: `CNAME`
+     - Name: `www`
+     - Target: `clarifymythoughts.jon-13b.workers.dev`
+     - Proxy status: Proxied
+5. **Assign your Worker to your domain:**
+   - In the Cloudflare dashboard, go to **Workers & Pages > Workers**.
+   - Select your Worker (`clarifymythoughts`).
+   - Add a route:
+     - `clarifymythoughts.com/*`
+   - (Optional) Add another route for `www`:
+     - `www.clarifymythoughts.com/*`
+   - Assign your Worker to these routes.
+6. **Wait for DNS propagation and SSL certificate issuance.**
+7. **Visit your domain to verify deployment.**
+
+### Deploying to Netlify or Vercel
+
+1. Connect your repository to Netlify or Vercel.
+2. Set the build command to `None` (static site).
+3. Set the publish directory to the project root (`/`).
+4. Deploy!
+
+### Deploying to Cloudflare Pages (Static Hosting)
+
+1. Connect your repository to Cloudflare Pages.
+2. Set the build command to `None` (static site).
+3. Set the output directory to the project root (`/`).
+4. Deploy!
+
+---
+
+For more details on Cloudflare Workers static site deployment, see [Cloudflare’s documentation](https://developers.cloudflare.com/workers/platform/sites/).

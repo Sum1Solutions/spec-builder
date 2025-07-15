@@ -15,15 +15,17 @@ The Spec Builder bridges the gap between domain expertise and technical implemen
 
 ## Features
 
-- Step-by-step form interface for gathering requirements
-- Support for multiple types of applications (forms, chatbots, etc.)
-- Clear specification output format
-- Example templates for common use cases
-- Responsive design for desktop and mobile
+- **Interactive Form:** A step-by-step form to guide you through the specification process.
+- **Dynamic Output:** Generates specs in multiple formats (Text, Markdown, JSON), only showing fields you've filled out.
+- **Use Examples:** Pre-filled examples for each field to get you started.
+- **Easy Clearing:** "Clear" buttons to reset individual fields.
+- **Share & Download:** Easily download your generated spec as a `.txt`, `.md`, or `.json` file.
+- **Responsive Design:** Works smoothly on both desktop and mobile devices.
+- **Community Links:** Quick links to the GitHub repository and a "Buy Me a Coffee" page.
 
 ## How to Use
 
-1. Open `spec-builder.html` in your web browser
+1. Open `index.html` in your web browser or navigate to the deployed site.
 2. Follow the step-by-step form to describe your project
 3. The app will generate a clear specification based on your inputs
 4. Use the generated specification as input for AI-assisted development tools

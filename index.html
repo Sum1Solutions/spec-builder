@@ -192,6 +192,31 @@
             background-color: #2980b9;
         }
 
+        .output-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .copy-btn:hover {
+            background-color: #2980b9;
+        }
+
         footer {
             text-align: center;
             margin-top: 40px;
@@ -313,7 +338,10 @@
                 </label>
             </div>
             
-            <div id="spec-output" class="spec-output"></div>
+            <div class="output-container">
+                <div id="spec-output" class="spec-output"></div>
+                <button class="copy-btn" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+            </div>
 
             <div class="suggestions">
                 <h3>💡 Suggested Use</h3>
@@ -351,27 +379,48 @@
             const data = new FormData(form);
             currentSpec = {};
             for (let [key, value] of data.entries()) {
-                currentSpec[key] = value.trim();
+                const trimmedValue = value.trim();
+                if (trimmedValue) { // Only add non-empty values
+                    currentSpec[key] = trimmedValue;
+                }
             }
-            // Output format selection
-            const format = document.querySelector('input[name="format"]:checked').value;
-            let output = '';
+            displaySpec();
+        }
+
+        function displaySpec() {
+            const outputElement = document.getElementById('spec-output');
+            const formatRadio = document.querySelector('input[name="format"]:checked');
+            const format = formatRadio ? formatRadio.value : 'text';
             
-            // Filter out empty fields
-            const nonEmptyFields = Object.entries(currentSpec).filter(([_, value]) => value.trim() !== '');
-            
-            if (format === 'markdown') {
-                nonEmptyFields.forEach(([key, value]) => {
-                    output += `## ${key.charAt(0).toUpperCase() + key.slice(1)}\n${value}\n`;
+            if (format === 'json') {
+                const specText = JSON.stringify(currentSpec, null, 4);
+                outputElement.textContent = specText;
+                outputElement.dataset.text = specText;
+            } else if (format === 'markdown') {
+                // Generate markdown format
+                let markdownPrompt = "# Application Specification\n\n";
+                
+                // Only show fields that have values
+                Object.entries(currentSpec).forEach(([key, value]) => {
+                    markdownPrompt += `## ${key}\n${value}\n\n`;
                 });
-            } else if (format === 'json') {
-                output = JSON.stringify(Object.fromEntries(nonEmptyFields), null, 2);
+                
+                markdownPrompt += "## Requirements\nPlease create a functional application that meets these requirements.";
+                outputElement.textContent = markdownPrompt;
+                outputElement.dataset.text = markdownPrompt;
             } else { // text format
-                nonEmptyFields.forEach(([key, value]) => {
-                    output += `${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}\n`;
+                // Generate conversational text format
+                let textPrompt = "Please build an application with the following specifications:\n\n";
+                
+                // Only show fields that have values
+                Object.entries(currentSpec).forEach(([key, value]) => {
+                    textPrompt += `• ${key}: ${value}\n`;
                 });
+                
+                textPrompt += "\nPlease create a functional application that meets these requirements.";
+                outputElement.textContent = textPrompt;
+                outputElement.dataset.text = textPrompt;
             }
-            document.getElementById('spec-output').textContent = output;
             document.getElementById('result-section').style.display = 'block';
             document.getElementById('form-section').style.display = 'none';
         }

@@ -1,5 +1,7 @@
 # Spec Builder for Domain Experts
 
+🚀 **[Live Demo](https://clarifymythoughts.com/)**
+
 [![Open in Windsurf](https://img.shields.io/badge/Open%20in-Windsurf-blue.svg)](https://wind.surf)
 ## Overview
 

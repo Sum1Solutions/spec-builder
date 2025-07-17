@@ -31,6 +31,45 @@
             margin-bottom: 25px;
             border-left: 4px solid #3498db;
         }
+        .critical-path-section {
+            background: #f0f8ff;
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .critical-path-section h3 {
+            color: #2980b9;
+            margin-top: 0;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .advanced-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+        .advanced-section h3 {
+            color: #6c757d;
+            margin-top: 0;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 6px;
+            font-style: italic;
+        }
         .form-group {
             margin-bottom: 20px;
         }
@@ -40,6 +79,9 @@
             color: #34495e;
             margin-bottom: 5px;
         }
+        .critical-path-section label {
+            color: #2980b9;
+        }
         textarea, input[type="text"], select {
             width: 100%;
             padding: 10px;
@@ -47,6 +89,10 @@
             border-radius: 6px;
             font-size: 14px;
             box-sizing: border-box;
+            white-space: pre-wrap; /* Preserve line breaks */
+        }
+        .critical-path-section textarea, .critical-path-section input[type="text"] {
+            border: 2px solid #3498db;
         }
         textarea {
             resize: vertical;
@@ -64,6 +110,13 @@
         }
         input[type="submit"]:hover, button:hover {
             background: #2980b9;
+        }
+        .generate-basic-btn {
+            background: #27ae60;
+            margin-right: 15px;
+        }
+        .generate-basic-btn:hover {
+            background: #219a52;
         }
         .result {
             display: none;
@@ -191,12 +244,10 @@
         .result-actions button:hover {
             background-color: #2980b9;
         }
-
         .output-container {
             position: relative;
             margin-bottom: 20px;
         }
-
         .copy-btn {
             position: absolute;
             top: 10px;
@@ -212,11 +263,27 @@
             align-items: center;
             gap: 5px;
         }
-
         .copy-btn:hover {
             background-color: #2980b9;
         }
-
+        .toggle-advanced-btn {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            font-size: 16px;
+        }
+        .toggle-advanced-btn:hover {
+            background: #5a6268;
+        }
+        .advanced-section.collapsed {
+            display: none;
+        }
         footer {
             text-align: center;
             margin-top: 40px;
@@ -225,13 +292,11 @@
             font-size: 14px;
             color: #6c757d;
         }
-
         footer a {
             color: #3498db;
             text-decoration: none;
             margin: 0 10px;
         }
-
         footer a:hover {
             text-decoration: underline;
         }
@@ -242,81 +307,104 @@
         <div id="form-section">
             <h2>🧠 Specification Builder for Domain Experts</h2>
             <div class="intro">
-                <p>This app helps you (a subject-matter expert like a clinician, lawyer, engineer, etc.) walk through your goals step-by-step to generate a clear specification for AI-assisted implementation. The system can then use this spec to generate or scaffold actual applications tailored to your domain.</p>
+                <p><strong>🎯 Vibe Coding Hub:</strong> This is your <em>only</em> interaction point with LLMs for this project. Fill out the spec here, then paste it directly into Claude/GPT to generate working code. No back-and-forth, no tangents, no "can you also add..." requests.</p>
+                <p><strong>🔑 The first 6 questions are the "Critical-Path 6" - enough to generate working code on the first try. Everything beyond that improves quality and future-proofing.</strong></p>
+                <p><em>Looking for a more comprehensive approach?</em> Try our <a href="original.html" style="color: #7f8c8d;">traditional specification builder</a> with all questions visible at once.</p>
             </div>
 
             <form id="specForm">
-                <div class="form-group">
-                    <label>1. What do you want to build? <button type="button" class="example-btn" onclick="useExample(this, 'Transcribe patient visits into SOAP notes')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="goal" rows="2" placeholder="e.g., Transcribe patient visits into SOAP notes"></textarea>
+                <div class="critical-path-section">
+                    <h3>🔑 Critical-Path 6 <span style="font-size: 0.8em; font-weight: normal;">(Essential for working code)</span></h3>
+                    <div class="section-description">
+                        These 6 questions provide the minimum viable specification to generate functional code. Fill these out and you can get a working demo.
+                    </div>
+
+                    <div class="form-group">
+                        <label>1. Goal: What are we building and why? <button type="button" class="example-btn" onclick="useExample(this, 'Parkinson\'s medication tracker - helps patients track symptoms and medication timing to optimize treatment')">🧠 Parkinson\'s App</button> <button type="button" class="example-btn" onclick="useExample(this, 'Transcribe patient visits into SOAP notes')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="goal" rows="2" placeholder="In one tweet, describe what we're building and why"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>2. Primary User: Who's the main user and what can/can't they do? <button type="button" class="example-btn" onclick="useExample(this, 'Parkinson\'s patients with tremors and memory issues - can use smartphone but struggle with small buttons and detailed data entry')">🧠 Parkinson\'s App</button> <button type="button" class="example-btn" onclick="useExample(this, 'Primary care clinicians, lawyers, students, etc.')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="user" rows="2" placeholder="Describe physical abilities, technical skills, context of use"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>3. Core Workflow: Describe the ONE happy-path scenario step-by-step <button type="button" class="example-btn" onclick="useExample(this, '1. Patient opens app when feeling symptoms 2. Taps large symptom buttons (tremor/stiffness) 3. App asks Did you take medication? 4. Patient taps Yes/No 5. App logs entry with timestamp')">🧠 Parkinson's App</button> <button type="button" class="example-btn" onclick="useExample(this, '1. Clinician uploads audio recording 2. System transcribes and identifies key medical terms 3. AI structures into SOAP format 4. Clinician reviews and approves')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="workflow" rows="3" placeholder="The main user journey from start to finish"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>4. Inputs: What raw signals arrive? <button type="button" class="example-btn" onclick="useExample(this, 'Touch taps on large buttons, device shake detection (tremor), time-based prompts')">🧠 Parkinson\'s App</button> <button type="button" class="example-btn" onclick="useExample(this, 'Audio recordings, PDFs, scanned documents, structured EHR data')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="inputs" rows="2" placeholder="e.g., touch taps, voice, file uploads, API calls"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>5. Outputs: What must render or speak on success? <button type="button" class="example-btn" onclick="useExample(this, 'Visual confirmation of logged entry, weekly summary charts, medication reminders')">🧠 Parkinson\'s App</button> <button type="button" class="example-btn" onclick="useExample(this, 'Structured SOAP notes, FHIR JSON, HL7 messages, formatted text, PDF summaries')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="outputs" rows="2" placeholder="e.g., displayed text, spoken words, file downloads, API responses"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>6. Stack Constraints: Technical requirements <button type="button" class="example-btn" onclick="useExample(this, 'Progressive Web App, works offline, large touch targets, high contrast UI, data syncs to caregiver portal')">🧠 Parkinson\'s App</button> <button type="button" class="example-btn" onclick="useExample(this, 'HIPAA compliant backend, cloud-based processing, integrates with existing EHR systems')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="stack" rows="2" placeholder="e.g., Must run as PWA on tablet, Python backend, works offline"></textarea>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button type="button" class="generate-basic-btn" onclick="generateBasicSpec()">🚀 Generate MVP Spec</button>
+                        <button type="button" onclick="generateSpec()">📄 Generate Full Spec</button>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>2. Why is this important? <button type="button" class="example-btn" onclick="useExample(this, 'Improve clinical documentation accuracy and reduce manual burden.')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="why" rows="3" placeholder="e.g., Improve clinical documentation accuracy and reduce manual burden."></textarea>
-                </div>
+                <button type="button" class="toggle-advanced-btn" onclick="toggleAdvanced()">
+                    <span id="toggle-text">▼ Show Anti-Tangent Shield (Scope Control)</span>
+                </button>
 
-                <div class="form-group">
-                    <label>3. Who will use this? <button type="button" class="example-btn" onclick="useExample(this, 'Primary care clinicians, lawyers, students, etc.')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="audience" rows="2" placeholder="e.g., Primary care clinicians, lawyers, students, etc."></textarea>
-                </div>
+                <div class="advanced-section collapsed" id="advanced-section">
+                    <h3>🛡️ Quality-Layer Questions <span style="font-size: 0.8em; font-weight: normal;">(Prevents rewrites later)</span></h3>
+                    <div class="section-description">
+                        These questions don't prevent the first run from working, but they prevent scope creep, crashes, and major rewrites down the road.
+                    </div>
 
-                <div class="form-group">
-                    <label>4. What data goes in? <button type="button" class="example-btn" onclick="useExample(this, 'Audio recordings, PDFs, scanned documents, structured EHR data')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="inputs" rows="2" placeholder="e.g., Audio recordings, PDFs, scanned documents, structured EHR data"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label>7. Success Metrics: How do we know it's working well? <button type="button" class="example-btn" onclick="useExample(this, 'Patients log symptoms 3x daily, 80% medication adherence improvement, reduced doctor visit prep time')">🧠 Parkinson\'s App</button> <button type="button" class="example-btn" onclick="useExample(this, '90%+ accuracy when compared to human notes, deployment-ready within 2 weeks, usable by non-technical staff')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="success" rows="3" placeholder="Measurable criteria for success"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>5. What should come out? <button type="button" class="example-btn" onclick="useExample(this, 'Structured SOAP notes, FHIR JSON, HL7 messages, formatted text, PDF summaries')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="outputs" rows="2" placeholder="e.g., Structured SOAP notes, FHIR JSON, HL7 messages, formatted text, PDF summaries"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label>8. Edge Cases & Risks: What could go wrong? <button type="button" class="example-btn" onclick="useExample(this, 'Severe tremor days when touch is difficult, forgotten medication timing, caregiver needs emergency access')">🧠 Parkinson\'s App</button> <button type="button" class="example-btn" onclick="useExample(this, 'Multiple speakers, unclear audio, language mixing, patient non-compliance')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="edges" rows="3" placeholder="Error conditions, unusual usage patterns, technical failures"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>6. What rules or constraints matter? <button type="button" class="example-btn" onclick="useExample(this, 'No hallucinations, enforce ICD-10/SNOMED mapping, HIPAA compliance, role-based access')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="constraints" rows="4" placeholder="e.g., No hallucinations, enforce ICD-10/SNOMED mapping, HIPAA compliance, role-based access"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label>9. Tone & Style: How should the app feel? <button type="button" class="example-btn" onclick="useExample(this, 'Encouraging but not patronizing, simple and clear, respects user dignity and independence')">🧠 Parkinson\'s App</button> <button type="button" class="example-btn" onclick="useExample(this, 'Professional, supportive, friendly, no jargon')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="style" rows="2" placeholder="Personality, visual style, interaction patterns"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>7. What does success look like? <button type="button" class="example-btn" onclick="useExample(this, '90%+ accuracy when compared to human notes, deployment-ready within 2 weeks, usable by non-technical staff')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="success" rows="3" placeholder="e.g., 90%+ accuracy when compared to human notes, deployment-ready within 2 weeks, usable by non-technical staff"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label>10. Secondary Personas: Who else might use this? <button type="button" class="example-btn" onclick="useExample(this, 'Caregivers monitoring patient data, neurologists reviewing symptom patterns, family members checking medication compliance')">🧠 Parkinson\'s App</button> <button type="button" class="example-btn" onclick="useExample(this, 'Medical assistants, transcriptionists, healthcare administrators, compliance officers')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="personas" rows="2" placeholder="Other users, administrators, stakeholders"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>8. Any edge cases or known challenges? <button type="button" class="example-btn" onclick="useExample(this, 'Multiple speakers, unclear audio, language mixing, patient non-compliance')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="edges" rows="3" placeholder="e.g., Multiple speakers, unclear audio, language mixing, patient non-compliance"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label>11. Roadmap Milestones: What comes next? <button type="button" class="example-btn" onclick="useExample(this, 'v1: Basic symptom logging, v2: Medication reminders, v3: Pattern recognition and insights, v4: Doctor portal integration')">🧠 Parkinson\'s App</button> <button type="button" class="example-btn" onclick="useExample(this, 'v1: Basic transcription, v2: EHR integration, v3: Multi-language support, v4: Real-time collaboration')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="roadmap" rows="3" placeholder="Future features, scaling plans, evolution"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>9. What examples or prompts could we test this with? <button type="button" class="example-btn" onclick="useExample(this, 'Sample audio of a 12-minute consultation with overlaps, 2 PDF documents with poor OCR quality')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="prompts" rows="3" placeholder="e.g., Sample audio of a 12-minute consultation with overlaps, 2 PDF documents with poor OCR quality"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label>12. Example Test Case: How can we test this quickly? <button type="button" class="example-btn" onclick="useExample(this, 'Simulate patient with mild tremor: open app, tap tremor and moderate, verify entry logged with timestamp and medication prompt appears')">🧠 Parkinson's App</button> <button type="button" class="example-btn" onclick="useExample(this, 'Sample audio of a 12-minute consultation with overlaps, 2 PDF documents with poor OCR quality')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="testcase" rows="3" placeholder="Specific scenario for regression testing"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>10. How should this app sound or feel (tone/style)? <button type="button" class="example-btn" onclick="useExample(this, 'Professional, supportive, friendly, no jargon')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="style" rows="2" placeholder="e.g., Professional, supportive, friendly, no jargon"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label>13. Data & Storage: How should information persist? <button type="button" class="example-btn" onclick="useExample(this, 'Local encrypted storage with cloud backup, data exportable for doctor visits, HIPAA compliant')">🧠 Parkinson\'s App</button> <button type="button" class="example-btn" onclick="useExample(this, 'Export PDF, temporary session only, save to user account')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <textarea name="storage" rows="2" placeholder="Data persistence, export needs, privacy requirements"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>11. What type of app is this? <button type="button" class="example-btn" onclick="useExample(this, 'Interactive Form, Chatbot Assistant, Dashboard/Viewer, Voice-to-Text Tool')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="type" rows="2" placeholder="e.g., Interactive Form, Chatbot Assistant, Dashboard/Viewer, Voice-to-Text Tool"></textarea>
+                    <div class="form-group">
+                        <label>14. App Name (Optional): <button type="button" class="example-btn" onclick="useExample(this, 'ParkinTrack, MotionMonitor, SymptomSync')">🧠 Parkinson\'s App</button> <button type="button" class="example-btn" onclick="useExample(this, 'SOAPify, CourtBot, VoiceNoteMD')">📋 SOAP Notes</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
+                        <input type="text" name="name" placeholder="Suggested name for the app">
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label>12. Should any data be stored or exported? <button type="button" class="example-btn" onclick="useExample(this, 'Export PDF, temporary session only, save to user account')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="storage" rows="2" placeholder="e.g., Export PDF, temporary session only, save to user account"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>13. What should the user feel when using this app? <button type="button" class="example-btn" onclick="useExample(this, 'Empowered, relieved, clear, confident')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <textarea name="emotion" rows="2" placeholder="e.g., Empowered, relieved, clear, confident"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>14. Optional: Want to name this app? <button type="button" class="example-btn" onclick="useExample(this, 'SOAPify, CourtBot, VoiceNoteMD')">📋 Use Example</button> <button type="button" class="clear-btn" onclick="clearField(this)">🗑️ Clear</button></label>
-                    <input type="text" name="name" placeholder="e.g., SOAPify, CourtBot, VoiceNoteMD">
-                </div>
-
-                <button type="button" id="generateBtn" onclick="generateSpec()">Generate Spec</button>
             </form>
         </div>
 
@@ -353,8 +441,8 @@
 
                 <h3>🧠 Model Suggestions</h3>
                 <ul>
-                    <li><b>Reasoning LLMs:</b> GPT-4, Claude 3, Gemini 1.5 Pro — for structuring outputs, logic-heavy planning, compliance validation</li>
-                    <li><b>Fast Draft LLMs:</b> GPT-3.5 Turbo, Claude Instant, Mistral 7B — for quick prototyping or drafting workflows</li>
+                    <li><b>For MVP Development:</b> Claude Sonnet, GPT-4, Gemini Pro — can handle the Critical-Path 6 effectively</li>
+                    <li><b>For Production Polish:</b> Use quality-layer specs with more powerful models for robust, maintainable code</li>
                 </ul>
             </div>
 
@@ -373,18 +461,37 @@
 
     <script>
         let currentSpec = {};
+        let isBasicMode = false;
         
         function generateSpec() {
+            isBasicMode = false;
+            collectFormData();
+            displaySpec();
+        }
+
+        function generateBasicSpec() {
+            isBasicMode = true;
+            collectFormData();
+            displaySpec();
+        }
+
+        function collectFormData() {
             const form = document.getElementById('specForm');
             const data = new FormData(form);
             currentSpec = {};
+            
+            // Define critical path fields
+            const criticalFields = ['goal', 'user', 'workflow', 'inputs', 'outputs', 'stack'];
+            
             for (let [key, value] of data.entries()) {
                 const trimmedValue = value.trim();
-                if (trimmedValue) { // Only add non-empty values
-                    currentSpec[key] = trimmedValue;
+                if (trimmedValue) {
+                    // If in basic mode, only include critical path fields
+                    if (!isBasicMode || criticalFields.includes(key)) {
+                        currentSpec[key] = trimmedValue;
+                    }
                 }
             }
-            displaySpec();
         }
 
         function displaySpec() {
@@ -392,31 +499,132 @@
             const formatRadio = document.querySelector('input[name="format"]:checked');
             const format = formatRadio ? formatRadio.value : 'text';
             
+            const modeText = isBasicMode ? " (MVP Version - Critical-Path 6)" : "";
+            const criticalFields = ['goal', 'user', 'workflow', 'inputs', 'outputs', 'stack'];
+            const totalFields = Object.keys(currentSpec).length;
+            const criticalCount = Object.keys(currentSpec).filter(key => criticalFields.includes(key)).length;
+            
+            // Generate spec hash for version tracking
+            const specContent = JSON.stringify(currentSpec, Object.keys(currentSpec).sort());
+            const specHash = generateSimpleHash(specContent);
+            const timestamp = new Date().toISOString();
+            const version = `v1.0.0-${isBasicMode ? 'mvp' : 'full'}-${specHash.substring(0, 8)}`;
+            
             if (format === 'json') {
-                const specText = JSON.stringify(currentSpec, null, 4);
+                const specObj = {
+                    _metadata: {
+                        version: version,
+                        specHash: specHash,
+                        generated: timestamp,
+                        mode: isBasicMode ? "mvp" : "full",
+                        fieldsCompleted: totalFields,
+                        criticalFieldsCompleted: criticalCount,
+                        completeness: isBasicMode ? `${criticalCount}/6 critical fields` : `${totalFields}/14 total fields (${criticalCount}/6 critical)`,
+                        gitCommitMessage: `feat: add ${isBasicMode ? 'MVP' : 'full'} spec ${version}`,
+                        filename: `${(currentSpec.name || 'app').toLowerCase().replace(/\s+/g, '-')}-spec-${version}.md`
+                    },
+                    ...currentSpec
+                };
+                const specText = JSON.stringify(specObj, null, 4);
                 outputElement.textContent = specText;
                 outputElement.dataset.text = specText;
             } else if (format === 'markdown') {
-                // Generate concise markdown format
-                let markdownPrompt = "# Spec\n\n";
+                let markdownPrompt = `# Application Specification${modeText}\n\n`;
                 
-                // Only show fields that have values
+                // Add version tracking header
+                markdownPrompt += `---\n`;
+                markdownPrompt += `version: ${version}\n`;
+                markdownPrompt += `spec_hash: ${specHash}\n`;
+                markdownPrompt += `generated: ${timestamp}\n`;
+                markdownPrompt += `mode: ${isBasicMode ? 'mvp' : 'full'}\n`;
+                markdownPrompt += `fields_completed: ${totalFields}\n`;
+                markdownPrompt += `critical_fields_completed: ${criticalCount}\n`;
+                markdownPrompt += `---\n\n`;
+                
+                if (isBasicMode) {
+                    markdownPrompt += `*This is an MVP specification containing the Critical-Path 6 essentials for generating working code.*\n\n`;
+                } else {
+                    markdownPrompt += `*This is a full specification including quality-layer fields for production-ready development.*\n\n`;
+                }
+                
+                markdownPrompt += `## Version Control\n`;
+                markdownPrompt += `- **Spec Version:** ${version}\n`;
+                markdownPrompt += `- **Spec Hash:** \`${specHash}\`\n`;
+                markdownPrompt += `- **Suggested Filename:** \`${(currentSpec.name || 'app').toLowerCase().replace(/\s+/g, '-')}-spec-${version}.md\`\n`;
+                markdownPrompt += `- **Suggested Commit:** \`feat: add ${isBasicMode ? 'MVP' : 'full'} spec ${version}\`\n\n`;
+                
+                // Field labels for better markdown
+                const fieldLabels = {
+                    goal: 'Goal',
+                    user: 'Primary User',
+                    workflow: 'Happy Path',
+                    inputs: 'Inputs',
+                    outputs: 'Outputs',
+                    stack: 'Tech Stack',
+                    success: 'Success Criteria',
+                    edges: 'Failure Modes',
+                    style: 'Voice & Tone',
+                    personas: 'Other Stakeholders',
+                    roadmap: 'Future Horizons',
+                    testcase: 'Validation Test',
+                    comments: 'Additional Context',
+                    name: 'App Name'
+                };
+                
                 Object.entries(currentSpec).forEach(([key, value]) => {
-                    markdownPrompt += `### ${key}\n${value}\n\n`;
+                    const label = fieldLabels[key] || key;
+                    const isCritical = criticalFields.includes(key) ? ' 🔑' : '';
+                    markdownPrompt += `## ${label}${isCritical}\n${value}\n\n`;
                 });
                 
                 outputElement.textContent = markdownPrompt;
                 outputElement.dataset.text = markdownPrompt;
             } else { // text format
-                // Generate conversational text format
-                let textPrompt = "Please build an application with the following specifications:\n\n";
+                let textPrompt = `Please build an application with the following specifications${modeText}:\n\n`;
                 
-                // Only show fields that have values
+                textPrompt += `SPEC VERSION: ${version}\n`;
+                textPrompt += `SPEC HASH: ${specHash}\n`;
+                textPrompt += `GENERATED: ${timestamp}\n\n`;
+                
+                if (isBasicMode) {
+                    textPrompt += `This is an MVP specification with the essential 6 components needed for working code.\n\n`;
+                } else {
+                    textPrompt += `This is a full specification including quality-layer fields for production development.\n\n`;
+                }
+                
+                const fieldLabels = {
+                    goal: 'Goal',
+                    user: 'Primary User',
+                    workflow: 'Core Workflow',
+                    inputs: 'Inputs',
+                    outputs: 'Outputs',
+                    stack: 'Stack Constraints',
+                    success: 'Success Metrics',
+                    edges: 'Edge Cases & Risks',
+                    style: 'Tone & Style',
+                    personas: 'Secondary Personas',
+                    roadmap: 'Roadmap Milestones',
+                    testcase: 'Example Test Case',
+                    storage: 'Data & Storage',
+                    name: 'App Name'
+                };
+                
                 Object.entries(currentSpec).forEach(([key, value]) => {
-                    textPrompt += `• ${key}: ${value}\n`;
+                    const label = fieldLabels[key] || key;
+                    const isCritical = criticalFields.includes(key) ? ' (CRITICAL)' : '';
+                    textPrompt += `• ${label}${isCritical}: ${value}\n`;
                 });
                 
                 textPrompt += "\nPlease create a functional application that meets these requirements.";
+                
+                if (isBasicMode) {
+                    textPrompt += " Focus on getting the core workflow working end-to-end first.";
+                }
+                
+                textPrompt += `\n\n--- Version Control ---\n`;
+                textPrompt += `Save this spec as: ${(currentSpec.name || 'app').toLowerCase().replace(/\s+/g, '-')}-spec-${version}.md\n`;
+                textPrompt += `Git commit message: feat: add ${isBasicMode ? 'MVP' : 'full'} spec ${version}\n`;
+                
                 outputElement.textContent = textPrompt;
                 outputElement.dataset.text = textPrompt;
             }
@@ -424,9 +632,21 @@
             document.getElementById('form-section').style.display = 'none';
         }
 
+        // Simple hash function for spec versioning
+        function generateSimpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32-bit integer
+            }
+            return Math.abs(hash).toString(16);
+        }
+
         function toggleFormat() {
-            // Regenerate output in selected format
-            generateSpec();
+            if (Object.keys(currentSpec).length > 0) {
+                displaySpec();
+            }
         }
 
         function showForm() {
@@ -437,7 +657,8 @@
         function downloadSpec() {
             const format = document.querySelector('input[name="format"]:checked').value;
             const content = document.getElementById('spec-output').textContent;
-            const filename = `spec.${format === 'markdown' ? 'md' : (format === 'json' ? 'json' : 'txt')}`;
+            const modeText = isBasicMode ? "_mvp" : "";
+            const filename = `spec${modeText}.${format === 'markdown' ? 'md' : (format === 'json' ? 'json' : 'txt')}`;
             const mimeType = `text/${format === 'json' ? 'json' : 'plain'}`;
 
             const blob = new Blob([content], { type: mimeType });
@@ -454,8 +675,20 @@
             alert('This feature will be available soon! Stay tuned.');
         }
 
+        function toggleAdvanced() {
+            const section = document.getElementById('advanced-section');
+            const toggleText = document.getElementById('toggle-text');
+            
+            if (section.classList.contains('collapsed')) {
+                section.classList.remove('collapsed');
+                toggleText.textContent = '▲ Hide Anti-Tangent Shield';
+            } else {
+                section.classList.add('collapsed');
+                toggleText.textContent = '▼ Show Anti-Tangent Shield (Scope Control)';
+            }
+        }
+
         function useExample(button, exampleText) {
-            // Find the nearest textarea or input element
             const parent = button.parentElement;
             let textarea = parent.parentElement.querySelector('textarea');
             if (!textarea) {
@@ -471,6 +704,36 @@
             if (textarea) {
                 textarea.value = '';
             }
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('spec-output');
+            const text = output.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            });
         }
     </script>
 </body>
